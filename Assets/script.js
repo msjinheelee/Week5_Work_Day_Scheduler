@@ -30,7 +30,7 @@
  }
 
 //  color time blocks and start interval to re-color every minute
- colorTimeBloacks();
+ timeBlockColor();
  setInterval(colorTimeBloacks, 60000);
 
 // update time blocks with data in local storage//
@@ -54,15 +54,15 @@ $(".saveBtn").on("click", handleSave);
          // console.log(this); //each time-block
  $(this).reniveClass("past present future");
 
-         if (currHour > blockHour) {
-             $(this).addClass("future");
-         } else if (currHour === blockHour) {
-             $(this).addClass("present");
-         } else {
+         if (blockHour < currentHour) {
              $(this).addClass("past");
+         } else if (blockHour > currentHour) {
+             $(this).addClass("future");
+         } else {
+             $(this).addClass("present");
          }
-     })
- };
+     });
+ }
  
  // WHEN I click the save button for that time block
  function handleSave(event){
