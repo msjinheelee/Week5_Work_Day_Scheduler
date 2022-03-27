@@ -24,7 +24,7 @@
      $("#currentDay").text(moment().format("dddd Do of MMMM YYYY"));
  
 //  color time blocks and start interval to re-color every minute
-function timeBlockColor() {
+function colorTimeBlock() {
     var hour = moment().hours();
 
     $(".time-block").each(function() {
@@ -68,7 +68,7 @@ function usePlanner() {
  * CALL FUNCTIONS
  */
 
-timeBlockColor();
+colorTimeBlock();
 usePlanner();
 
  
