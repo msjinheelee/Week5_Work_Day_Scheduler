@@ -18,26 +18,45 @@
 /**
  * DEFINE VARIABLES
  */
- var saveBtn = $(".saveBtn");
+//  var saveBtn = $(".saveBtn");
  /**
   * FUNCTIONS
   */
  
  // current day is displayed at the top of the calendar
- $("#currentDay").text(moment().format('dddd Do of MMMM YYYY'));
- 
+ $(init);
+ function init() {
+     $("#currentDay").text(moment().format("dddd Do of MMMM YYYY"));
+ }
+
+//  color time blocks and start interval to re-color every minute
+ colorTimeBloacks();
+ setInterval(colorTimeBloacks, 60000);
+
+// update time blocks with data in local storage//
+$(".time-block").each(function(){
+    var blockId = $(this).attr("id");
+    // load saved data from local storage
+    $("#" + blockId + " textarea").text(localStorage.getItem(moment().formate("DDDYYYY") + blockId));
+});
+
+// attach our handler for the save buttons
+$(".saveBtn").on("click", handleSave);
+
+
  // each time block is color-coded to indicate whether it is in the past, present, or future
  function timeBlockColor() {
-     var hour = moment().hours();
+    //  var hour = moment().hours();
  
      $(".time-block").each(function() {
-         var currHour = parseInt($(this).attr("id"));
- 
+        var blockHour = parseInt($(this).attr("id").replace("hour-","")); 
+        var currHour = parseInt(moment(),format("H")); 
          // console.log(this); //each time-block
- 
-         if (currHour > hour) {
+ $(this).reniveClass("past present future");
+
+         if (currHour > blockHour) {
              $(this).addClass("future");
-         } else if (currHour === hour) {
+         } else if (currHour === blockHour) {
              $(this).addClass("present");
          } else {
              $(this).addClass("past");
@@ -46,38 +65,44 @@
  };
  
  // WHEN I click the save button for that time block
- saveBtn.on("click", function() {
- 
-     // console.log(this); //save button
-     var time = $(this).siblings(".hour").text();
-     var plan = $(this).siblings(".plan").val();
- 
-     // THEN the text for that event is saved in local storage
-     localStorage.setItem(time, plan);
- });
- 
- // WHEN I refresh the page
- // THEN the saved events persist
- function usePlanner() {
- 
-     $(".hour").each(function() {
-         var currHour = $(this).text();
-         var currPlan = localStorage.getItem(currHour);
- 
-         // console.log(this);
-         // console.log(currHour);
- 
-         if(currPlan !== null) {
-             $(this).siblings(".plan").val(currPlan);
-         }
-     });
+ function handleSave(event){
+     var hourID = $(this).parent().attr("id");
+     localStorage.setItem(moment().format("DDDYYYY")+ hourID, $("#"+hourID + " textarea").val());
  }
  
- /**
-  * CALL FUNCTIONS
-  */
- timeBlockColor();
- usePlanner();
+ 
+//  saveBtn.on("click", function() {
+ 
+//      // console.log(this); //save button
+//      var time = $(this).siblings(".hour").text();
+//      var plan = $(this).siblings(".plan").val();
+ 
+//      // THEN the text for that event is saved in local storage
+//      localStorage.setItem(time, plan);
+//  });
+ 
+//  // WHEN I refresh the page
+//  // THEN the saved events persist
+//  function usePlanner() {
+ 
+//      $(".hour").each(function() {
+//          var currHour = $(this).text();
+//          var currPlan = localStorage.getItem(currHour);
+ 
+//          // console.log(this);
+//          // console.log(currHour);
+ 
+//          if(currPlan !== null) {
+//              $(this).siblings(".plan").val(currPlan);
+//          }
+//      });
+//  }
+ 
+//  /**
+//   * CALL FUNCTIONS
+//   */
+//  timeBlockColor();
+//  usePlanner();
  
  
  
